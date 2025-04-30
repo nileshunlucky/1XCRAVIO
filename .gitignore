@@ -17,3 +17,6 @@ Thumbs.db
 
 # Ignore Render deployment files (optional, if you want)
 *.sqlite3
+
+client_secret.json
+youtube_token.json
