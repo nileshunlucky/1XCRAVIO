@@ -52,7 +52,7 @@ def initialize_scheduler():
         youtube_upload,
         CronTrigger(hour=20, minute=0),
         id="youtube_daily_post",
-        name="Daily YouTube Upload"
+        name="Daily YouTube Upload" 
     )
     
     # Start the scheduler
