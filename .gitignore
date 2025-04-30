@@ -1,0 +1,19 @@
+# Ignore Python virtual environment
+venv/
+
+# Ignore environment variables
+*.env
+
+# Ignore Python bytecode
+__pycache__/
+*.pyc
+
+# Ignore logs and system files
+*.log
+.DS_Store
+
+# Ignore OS-specific files
+Thumbs.db
+
+# Ignore Render deployment files (optional, if you want)
+*.sqlite3
