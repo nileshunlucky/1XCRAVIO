@@ -42,7 +42,7 @@ def initialize_scheduler():
     
     scheduler.add_job(
         instagram_post,
-        CronTrigger(hour= 21, minute=40),
+        CronTrigger(hour= 21, minute=45),
         id="instagram_evening_post",
         name="Evening Instagram Post"
     )
@@ -50,7 +50,7 @@ def initialize_scheduler():
     # YouTube schedules
     scheduler.add_job(
         youtube_upload,
-        CronTrigger(hour=21, minute=40),
+        CronTrigger(hour=21, minute=45),
         id="youtube_daily_post",
         name="Daily YouTube Upload" 
     )

@@ -13,6 +13,7 @@ import requests
 import io
 import tempfile
 from datetime import datetime
+import json
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -94,21 +95,50 @@ def get_youtube_credentials():
     """Get or refresh YouTube API credentials."""
     creds = None
     
+    # Check if YOUTUBE_TOKEN_JSON is a file path or JSON string
     if os.path.exists(YOUTUBE_TOKEN_JSON):
-        creds = Credentials.from_authorized_user_info(
-            info=eval(open(YOUTUBE_TOKEN_JSON).read()), scopes=SCOPES)
+        # It's a file path
+        with open(YOUTUBE_TOKEN_JSON, 'r') as f:
+            token_data = f.read()
+            try:
+                creds = Credentials.from_authorized_user_info(
+                    info=json.loads(token_data), scopes=SCOPES)
+            except json.JSONDecodeError:
+                # Try eval as fallback for string representation
+                creds = Credentials.from_authorized_user_info(
+                    info=eval(token_data), scopes=SCOPES)
+    else:
+        # It might be a JSON string directly
+        try:
+            creds = Credentials.from_authorized_user_info(
+                info=json.loads(YOUTUBE_TOKEN_JSON), scopes=SCOPES)
+        except (json.JSONDecodeError, TypeError):
+            logger.error("YOUTUBE_TOKEN_JSON is neither a valid file path nor a valid JSON string")
     
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                YOUTUBE_CLIENT_SECRETS_JSON, SCOPES)
+            # Similar check for client secrets
+            if os.path.exists(YOUTUBE_CLIENT_SECRETS_JSON):
+                # It's a file path
+                flow = InstalledAppFlow.from_client_secrets_file(
+                    YOUTUBE_CLIENT_SECRETS_JSON, SCOPES)
+            else:
+                # Create a temporary file from the JSON string
+                with tempfile.NamedTemporaryFile(mode='w+', suffix='.json', delete=False) as temp_file:
+                    temp_file.write(YOUTUBE_CLIENT_SECRETS_JSON)
+                    temp_secrets_path = temp_file.name
+                
+                flow = InstalledAppFlow.from_client_secrets_file(
+                    temp_secrets_path, SCOPES)
+                os.unlink(temp_secrets_path)  # Clean up
+                
             creds = flow.run_local_server(port=0)
         
         # Save the credentials for the next run
-        with open(YOUTUBE_TOKEN_JSON, 'w') as token:
-            token.write(str(creds.to_json()))
+        with open("youtube_token.json", 'w') as token:
+            token.write(creds.to_json())
     
     return creds
 
