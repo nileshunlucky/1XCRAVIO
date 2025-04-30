@@ -29,8 +29,8 @@ SCOPES = ["https://www.googleapis.com/auth/youtube.upload",
           "https://www.googleapis.com/auth/youtube"]
 API_SERVICE_NAME = "youtube"
 API_VERSION = "v3"
-CLIENT_SECRETS_FILE = os.getenv("YOUTUBE_CLIENT_SECRETS_FILE", "client_secret.json")
-TOKEN_FILE = os.getenv("YOUTUBE_TOKEN_FILE", "youtube_token.json")
+YOUTUBE_CLIENT_SECRETS_JSON = os.getenv("YOUTUBE_CLIENT_SECRETS_JSON", "client_secret.json")
+YOUTUBE_TOKEN_JSON = os.getenv("YOUTUBE_TOKEN_JSON", "youtube_token.json")
 CLOUDINARY_FOLDER = "1XCRAVIO"
 
 # YouTube video metadata
@@ -57,7 +57,7 @@ In this video, I show you my complete workflow for making high-quality content w
 ✅ No editing skills required
 ✅ Super easy to use
 
-Try Cravio AI: [YOUR AFFILIATE LINK]
+Try Cravio AI: cravioai.vercel.app
 
 #CravioAI #FacelessContent #ContentCreation #AITools #PassiveIncome
     """,
@@ -66,14 +66,7 @@ Try Cravio AI: [YOUR AFFILIATE LINK]
 
 I've tried dozens of AI tools, but Cravio is the only one that consistently produces high-quality content that performs well. In this video, I'll show you exactly how I use it.
 
-Try Cravio yourself: [YOUR AFFILIATE LINK]
-
-00:00 - Introduction
-01:15 - How Cravio Works
-03:20 - Creating Your First Video
-05:45 - Customization Options
-08:10 - Publishing Strategies
-10:30 - Results & Income
+Try Cravio yourself: cravioai.vercel.app
 
 #CravioAI #ContentCreation #AITools #FacelessYouTube #PassiveIncome
     """,
@@ -82,7 +75,7 @@ Try Cravio yourself: [YOUR AFFILIATE LINK]
 
 Cravio AI has completely transformed my content creation process. In this video, I'll demonstrate how you can go from a simple idea to a fully produced video in minutes - no technical skills required!
 
-🔗 Try Cravio: [YOUR AFFILIATE LINK]
+🔗 Try Cravio: cravioai.vercel.app
 
 #CravioAI #FacelessContent #AITools #ContentCreation #PassiveIncome
     """
@@ -101,20 +94,20 @@ def get_youtube_credentials():
     """Get or refresh YouTube API credentials."""
     creds = None
     
-    if os.path.exists(TOKEN_FILE):
+    if os.path.exists(YOUTUBE_TOKEN_JSON):
         creds = Credentials.from_authorized_user_info(
-            info=eval(open(TOKEN_FILE).read()), scopes=SCOPES)
+            info=eval(open(YOUTUBE_TOKEN_JSON).read()), scopes=SCOPES)
     
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                CLIENT_SECRETS_FILE, SCOPES)
+                YOUTUBE_CLIENT_SECRETS_JSON, SCOPES)
             creds = flow.run_local_server(port=0)
         
         # Save the credentials for the next run
-        with open(TOKEN_FILE, 'w') as token:
+        with open(YOUTUBE_TOKEN_JSON, 'w') as token:
             token.write(str(creds.to_json()))
     
     return creds
