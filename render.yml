@@ -19,3 +19,8 @@ services:
         sync: false
       - key: IG_ACCESS_TOKEN
         sync: false
+      # YouTube credentials - these will need to be set up in the Render dashboard
+      - key: YOUTUBE_CLIENT_SECRETS_FILE
+        sync: false
+      - key: YOUTUBE_TOKEN_FILE
+        sync: false
