@@ -191,14 +191,6 @@ def initialize_scheduler():
         id="morning_post",
         name="Morning Instagram Post"
     )
-
-    # Schedule posts at 2:30 PM
-    scheduler.add_job(
-        post_random_video,
-        CronTrigger(hour=14, minute=30),
-        id="afternoon_post",
-        name="Afternoon Instagram Post"
-    )
     
     # Schedule posts at 7:00 PM
     scheduler.add_job(
