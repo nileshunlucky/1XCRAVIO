@@ -46,7 +46,7 @@ def initialize_scheduler():
         id="instagram_evening_post",
         name="Evening Instagram Post"
     )
-    
+
     # YouTube schedules
     scheduler.add_job(
         youtube_upload,
