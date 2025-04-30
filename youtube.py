@@ -14,7 +14,6 @@ import io
 import tempfile
 from datetime import datetime
 import json
-
 # Configure logging
 logger = logging.getLogger(__name__)
 
@@ -88,8 +87,7 @@ TAGS = [
     "FacelessYouTube", "OnlineIncome", "DigitalMarketing"
 ]
 
-CATEGORY_ID = "22"  # People & Blogs
-
+CATEGORY_ID = "27"  # Education
 
 def get_youtube_credentials():
     """Get or refresh YouTube API credentials."""

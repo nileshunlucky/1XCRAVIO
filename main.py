@@ -46,7 +46,7 @@ def initialize_scheduler():
 
     scheduler.add_job(
         instagram_post,
-        CronTrigger(hour=22, minute=0, timezone=india_tz),
+        CronTrigger(hour=19, minute=0, timezone=india_tz),
         id="instagram_evening_post",
         name="Evening Instagram Post",
         replace_existing=True
@@ -63,7 +63,7 @@ def initialize_scheduler():
 
     scheduler.add_job(
         youtube_upload,
-        CronTrigger(hour=22, minute=0, timezone=india_tz),
+        CronTrigger(hour=19, minute=0, timezone=india_tz),
         id="youtube_evening_post",
         name="Evening YouTube Upload",
         replace_existing=True
