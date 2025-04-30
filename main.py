@@ -120,7 +120,7 @@ def post_video_to_instagram(video_url, caption):
         create_payload = {
             "video_url": video_url,
             "caption": caption,
-            "media_type": "VIDEO",
+            "media_type": "REELS",
             "access_token": ACCESS_TOKEN
         }
 
