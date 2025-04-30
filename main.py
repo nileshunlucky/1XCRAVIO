@@ -4,6 +4,8 @@ from fastapi import FastAPI, HTTPException
 from dotenv import load_dotenv
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
+from pytz import timezone
+
 
 # Import platform-specific modules
 from instagram import post_random_video as instagram_post
@@ -29,33 +31,44 @@ app = FastAPI(
 
 # Initialize scheduler
 def initialize_scheduler():
-    """Set up the scheduler with cron jobs."""
+    """Set up the scheduler with cron jobs using Indian timezone."""
     scheduler = BackgroundScheduler()
-    
+    india_tz = timezone("Asia/Kolkata")
+
     # Instagram schedules
     scheduler.add_job(
         instagram_post,
-        CronTrigger(hour=11, minute=0),
+        CronTrigger(hour=7, minute=0, timezone=india_tz),
         id="instagram_morning_post",
-        name="Morning Instagram Post"
+        name="Morning Instagram Post",
+        replace_existing=True
     )
-    
+
     scheduler.add_job(
         instagram_post,
-        CronTrigger(hour= 21, minute=45),
+        CronTrigger(hour=22, minute=0, timezone=india_tz),
         id="instagram_evening_post",
-        name="Evening Instagram Post"
+        name="Evening Instagram Post",
+        replace_existing=True
     )
 
     # YouTube schedules
     scheduler.add_job(
         youtube_upload,
-        CronTrigger(hour=21, minute=45),
-        id="youtube_daily_post",
-        name="Daily YouTube Upload" 
+        CronTrigger(hour=7, minute=0, timezone=india_tz),
+        id="youtube_morning_post",
+        name="Morning YouTube Upload",
+        replace_existing=True
     )
-    
-    # Start the scheduler
+
+    scheduler.add_job(
+        youtube_upload,
+        CronTrigger(hour=22, minute=0, timezone=india_tz),
+        id="youtube_evening_post",
+        name="Evening YouTube Upload",
+        replace_existing=True
+    )
+
     scheduler.start()
     logger.info("Scheduler started with all social media posting jobs")
     return scheduler
