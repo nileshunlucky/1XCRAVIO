@@ -11,7 +11,7 @@ from pytz import timezone
 from instagram import post_random_video as instagram_post
 from instagram2 import post_random_video as instagram2_post
 from youtube import upload_random_video as youtube_upload
-# from youtube2 import upload_random_video as youtube2_upload
+from youtube2 import upload_random_video as youtube2_upload
 
 # Configure logging
 logging.basicConfig(
@@ -40,7 +40,7 @@ def initialize_scheduler():
     # Instagram schedules
     scheduler.add_job(
         instagram_post,
-        CronTrigger(hour=10, minute=55, timezone=india_tz),
+        CronTrigger(hour=10, minute=50, timezone=india_tz),
         id="instagram_morning_post",
         name="Morning Instagram Post",
         replace_existing=True
@@ -48,7 +48,7 @@ def initialize_scheduler():
 
     scheduler.add_job(
         instagram_post,
-        CronTrigger(hour=21, minute=55, timezone=india_tz),
+        CronTrigger(hour=18, minute=50, timezone=india_tz),
         id="instagram_evening_post",
         name="Evening Instagram Post",
         replace_existing=True
@@ -57,7 +57,7 @@ def initialize_scheduler():
     # Instagram 2 schedules
     scheduler.add_job(
         instagram2_post,
-        CronTrigger(hour=11, minute=0, timezone=india_tz),
+        CronTrigger(hour=10, minute=55, timezone=india_tz),
         id="instagram2_morning_post",
         name="Morning Instagram Post",
         replace_existing=True
@@ -65,7 +65,7 @@ def initialize_scheduler():
 
     scheduler.add_job(
         instagram2_post,
-        CronTrigger(hour=22, minute=0, timezone=india_tz),
+        CronTrigger(hour=18, minute=55, timezone=india_tz),
         id="instagram2_evening_post",
         name="Evening Instagram Post",
         replace_existing=True
@@ -82,28 +82,28 @@ def initialize_scheduler():
 
     scheduler.add_job(
         youtube_upload,
-        CronTrigger(hour=22, minute=5, timezone=india_tz),
+        CronTrigger(hour=19, minute=0, timezone=india_tz),
         id="youtube_evening_post",
         name="Evening YouTube Upload",
         replace_existing=True
     )
 
     # YouTube 2 schedules
-    # scheduler.add_job(
-    #     youtube2_upload,
-    #     CronTrigger(hour=10, minute=55, timezone=india_tz),
-    #     id="youtube2_morning_post",
-    #     name="Morning YouTube Upload",
-    #     replace_existing=True
-    # )
+    scheduler.add_job(
+        youtube2_upload,
+        CronTrigger(hour=11, minute=5, timezone=india_tz),
+        id="youtube2_morning_post",
+        name="Morning YouTube Upload",
+        replace_existing=True
+    )
 
-    # scheduler.add_job(
-    #     youtube2_upload,
-    #     CronTrigger(hour=22, minute=10, timezone=india_tz),
-    #     id="youtube2_evening_post",
-    #     name="Evening YouTube Upload",
-    #     replace_existing=True
-    # )
+    scheduler.add_job(
+        youtube2_upload,
+        CronTrigger(hour=19, minute=5, timezone=india_tz),
+        id="youtube2_evening_post",
+        name="Evening YouTube Upload",
+        replace_existing=True
+    )
 
     scheduler.start()
     logger.info("Scheduler started with all social media posting jobs")
@@ -155,15 +155,16 @@ def manual_youtube_upload():
     except Exception as e:
         logger.error(f"Error in manual YouTube upload: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
-# @app.get("/youtube2/upload-now")
-# def manual_youtube2_upload():
-#     """Trigger an immediate YouTube upload."""
-#     try:
-#         youtube2_upload()
-#         return {"status": "success", "message": "Manual YouTube upload triggered successfully"}
-#     except Exception as e:
-#         logger.error(f"Error in manual YouTube upload: {str(e)}")
-#         raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/youtube2/upload-now")
+def manual_youtube2_upload():
+    """Trigger an immediate YouTube upload."""
+    try:
+        youtube2_upload()
+        return {"status": "success", "message": "Manual YouTube upload triggered successfully"}
+    except Exception as e:
+        logger.error(f"Error in manual YouTube upload: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/jobs")
 def list_jobs():
