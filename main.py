@@ -10,6 +10,7 @@ from pytz import timezone
 # Import platform-specific modules
 from instagram import post_random_video as instagram_post
 from youtube import upload_random_video as youtube_upload
+from youtube2 import upload_random_video as youtube2_upload
 
 # Configure logging
 logging.basicConfig(
@@ -69,6 +70,23 @@ def initialize_scheduler():
         replace_existing=True
     )
 
+    # YouTube schedules
+    scheduler.add_job(
+        youtube2_upload,
+        CronTrigger(hour=11, minute=0, timezone=india_tz),
+        id="youtube_morning_post",
+        name="Morning YouTube Upload",
+        replace_existing=True
+    )
+
+    scheduler.add_job(
+        youtube2_upload,
+        CronTrigger(hour=19, minute=0, timezone=india_tz),
+        id="youtube_evening_post",
+        name="Evening YouTube Upload",
+        replace_existing=True
+    )
+
     scheduler.start()
     logger.info("Scheduler started with all social media posting jobs")
     return scheduler
@@ -106,6 +124,15 @@ def manual_youtube_upload():
     """Trigger an immediate YouTube upload."""
     try:
         youtube_upload()
+        return {"status": "success", "message": "Manual YouTube upload triggered successfully"}
+    except Exception as e:
+        logger.error(f"Error in manual YouTube upload: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+@app.get("/youtube2/upload-now")
+def manual_youtube_upload():
+    """Trigger an immediate YouTube upload."""
+    try:
+        youtube2_upload()
         return {"status": "success", "message": "Manual YouTube upload triggered successfully"}
     except Exception as e:
         logger.error(f"Error in manual YouTube upload: {str(e)}")

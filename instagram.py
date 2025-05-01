@@ -20,7 +20,7 @@ cloudinary.config(
 # Instagram Graph API credentials
 IG_USER_ID = os.getenv("IG_USER_ID")
 ACCESS_TOKEN = os.getenv("IG_ACCESS_TOKEN")
-CLOUDINARY_FOLDER = "1XCRAVIO"
+CLOUDINARY_FOLDER = "CRAVIOFY"
 
 # Instagram captions
 CAPTIONS = [
