@@ -73,7 +73,7 @@ def initialize_scheduler():
     # YouTube schedules
     scheduler.add_job(
         youtube2_upload,
-        CronTrigger(hour=11, minute=0, timezone=india_tz),
+        CronTrigger(hour=10, minute=55, timezone=india_tz),
         id="youtube_morning_post",
         name="Morning YouTube Upload",
         replace_existing=True
@@ -81,7 +81,7 @@ def initialize_scheduler():
 
     scheduler.add_job(
         youtube2_upload,
-        CronTrigger(hour=19, minute=0, timezone=india_tz),
+        CronTrigger(hour=18, minute=55, timezone=india_tz),
         id="youtube_evening_post",
         name="Evening YouTube Upload",
         replace_existing=True

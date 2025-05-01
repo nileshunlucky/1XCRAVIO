@@ -227,6 +227,39 @@ def add_comment_to_video(youtube, video_id):
         return comment_id
     except Exception as e:
         logger.error(f"Error adding comment to video {video_id}: {str(e)}")
+        
+        # Check if this is a scope issue and try to re-authenticate
+        if "insufficient authentication scopes" in str(e) or "insufficientPermissions" in str(e):
+            logger.info("Attempting to re-authenticate with proper scopes...")
+            try:
+                # Force token refresh with all required scopes
+                credentials = get_youtube_credentials(force_refresh=True)
+                youtube = build(API_SERVICE_NAME, API_VERSION, credentials=credentials)
+                
+                # Try commenting again
+                comment_text = random.choice(VIDEO_COMMENTS)
+                comment = {
+                    "snippet": {
+                        "videoId": video_id,
+                        "topLevelComment": {
+                            "snippet": {
+                                "textOriginal": comment_text
+                            }
+                        }
+                    }
+                }
+                
+                response = youtube.commentThreads().insert(
+                    part="snippet",
+                    body=comment
+                ).execute()
+                
+                comment_id = response["id"]
+                logger.info(f"Successfully added comment after re-authentication. Comment ID: {comment_id}")
+                return comment_id
+            except Exception as retry_error:
+                logger.error(f"Re-authentication failed: {str(retry_error)}")
+        
         return None
 
 
