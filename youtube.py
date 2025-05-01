@@ -32,8 +32,8 @@ SCOPES = [
 API_SERVICE_NAME = "youtube"
 API_VERSION = "v3"
 YOUTUBE_CLIENT_SECRETS_JSON = os.getenv("YOUTUBE_CLIENT_SECRETS_JSON")
-YOUTUBE_TOKEN_JSON = os.getenv("YOUTUBE_TOKEN_JSON")
-CLOUDINARY_FOLDER = "1XCRAVIO"
+YOUTUBE_TOKEN_JSON2 = os.getenv("YOUTUBE_TOKEN_JSON2")
+CLOUDINARY_FOLDER = "CRAVIOFY"
 
 # YouTube video metadata (unchanged)
 TITLES = [
@@ -124,27 +124,27 @@ def get_youtube_credentials(force_refresh=False):
             creds = None
     
     # If no local token file, check environment variable
-    if not creds and YOUTUBE_TOKEN_JSON:
+    if not creds and YOUTUBE_TOKEN_JSON2:
         try:
             # FIX: Try to directly parse the token JSON string
             try:
-                token_info = json.loads(YOUTUBE_TOKEN_JSON)
+                token_info = json.loads(YOUTUBE_TOKEN_JSON2)
                 creds = Credentials.from_authorized_user_info(
                     info=token_info, scopes=SCOPES)
-                logger.info("Loaded credentials from YOUTUBE_TOKEN_JSON environment variable")
+                logger.info("Loaded credentials from YOUTUBE_TOKEN_JSON2 environment variable")
             except json.JSONDecodeError:
                 # Try to properly format the token
-                token_str = YOUTUBE_TOKEN_JSON.replace("'", '"')
+                token_str = YOUTUBE_TOKEN_JSON2.replace("'", '"')
                 token_info = json.loads(token_str)
                 creds = Credentials.from_authorized_user_info(
                     info=token_info, scopes=SCOPES)
-                logger.info("Loaded credentials from YOUTUBE_TOKEN_JSON environment variable (after formatting)")
+                logger.info("Loaded credentials from YOUTUBE_TOKEN_JSON2 environment variable (after formatting)")
         except Exception as e:
-            logger.error(f"Error loading credentials from YOUTUBE_TOKEN_JSON: {str(e)}")
+            logger.error(f"Error loading credentials from YOUTUBE_TOKEN_JSON2: {str(e)}")
             
             # FIX: Additional fallback for when token JSON is not properly formatted
             try:
-                token_parts = YOUTUBE_TOKEN_JSON.split(',')
+                token_parts = YOUTUBE_TOKEN_JSON2.split(',')
                 token_dict = {}
                 for part in token_parts:
                     if ':' in part:
@@ -161,7 +161,7 @@ def get_youtube_credentials(force_refresh=False):
                     client_secret=token_dict.get('client_secret'),
                     scopes=SCOPES
                 )
-                logger.info("Loaded credentials from YOUTUBE_TOKEN_JSON environment variable (manual parsing)")
+                logger.info("Loaded credentials from YOUTUBE_TOKEN_JSON2 environment variable (manual parsing)")
             except Exception as e2:
                 logger.error(f"Error during fallback token parsing: {str(e2)}")
     
