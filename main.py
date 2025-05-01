@@ -9,6 +9,7 @@ from pytz import timezone
 
 # Import platform-specific modules
 from instagram import post_random_video as instagram_post
+from instagram2 import post_random_video as instagram2_post
 from youtube import upload_random_video as youtube_upload
 from youtube2 import upload_random_video as youtube2_upload
 
@@ -39,7 +40,7 @@ def initialize_scheduler():
     # Instagram schedules
     scheduler.add_job(
         instagram_post,
-        CronTrigger(hour=11, minute=0, timezone=india_tz),
+        CronTrigger(hour=10, minute=55, timezone=india_tz),
         id="instagram_morning_post",
         name="Morning Instagram Post",
         replace_existing=True
@@ -47,6 +48,23 @@ def initialize_scheduler():
 
     scheduler.add_job(
         instagram_post,
+        CronTrigger(hour=18, minute=55, timezone=india_tz),
+        id="instagram_evening_post",
+        name="Evening Instagram Post",
+        replace_existing=True
+    )
+
+    # Instagram 2 schedules
+    scheduler.add_job(
+        instagram2_post,
+        CronTrigger(hour=11, minute=0, timezone=india_tz),
+        id="instagram_morning_post",
+        name="Morning Instagram Post",
+        replace_existing=True
+    )
+
+    scheduler.add_job(
+        instagram2_post,
         CronTrigger(hour=19, minute=0, timezone=india_tz),
         id="instagram_evening_post",
         name="Evening Instagram Post",
@@ -70,7 +88,7 @@ def initialize_scheduler():
         replace_existing=True
     )
 
-    # YouTube schedules
+    # YouTube 2 schedules
     scheduler.add_job(
         youtube2_upload,
         CronTrigger(hour=10, minute=55, timezone=india_tz),
@@ -114,6 +132,15 @@ def manual_instagram_post():
     """Trigger an immediate Instagram post."""
     try:
         instagram_post()
+        return {"status": "success", "message": "Manual Instagram post triggered successfully"}
+    except Exception as e:
+        logger.error(f"Error in manual Instagram post: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+@app.get("/instagram2/post-now")
+def manual_instagram_post():
+    """Trigger an immediate Instagram post."""
+    try:
+        instagram2_post()
         return {"status": "success", "message": "Manual Instagram post triggered successfully"}
     except Exception as e:
         logger.error(f"Error in manual Instagram post: {str(e)}")

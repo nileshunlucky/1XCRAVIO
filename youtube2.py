@@ -32,52 +32,74 @@ YOUTUBE_CLIENT_SECRETS_JSON = os.getenv("YOUTUBE_CLIENT_SECRETS_JSON")
 YOUTUBE_TOKEN_JSON2 = os.getenv("YOUTUBE_TOKEN_JSON2")
 CLOUDINARY_FOLDER = "CRAVIOFY"
 
-# YouTube video metadata (unchanged)
+
 TITLES = [
-    "How I Make Faceless Videos in Minutes with Cravio AI",
-    "This AI Tool Changed My Content Creation Game Forever",
-    "Creating High-Quality Faceless Videos Without Any Equipment",
-    "How to Use AI to Automate Your Content Creation (Cravio Tutorial)",
-    "The Ultimate AI Tool for Faceless Content Creators",
-    "How I Make $1000/Week with AI-Generated Content",
-    "Cravio AI: The Tool Every Content Creator Needs",
-    "Automated Video Creation: From Script to Upload in 10 Minutes",
-    "No Camera, No Problem: Create Professional Videos with AI",
-    "Stop Struggling with Content Creation: Try This AI Tool"
+    "STOP Scrolling! My Secret Passive Income with AI Revealed! 🤯💸 #cravio #ai #shorts",
+    "This AI Tool Will Change Your Life (and Wallet)! 🚀💰 #cravio #ai #shorts",
+    "NEVER Show Your Face, STILL Make Money Online! ✅🤫 #cravio #ai #shorts",
+    "Automate Your YouTube Channel & EARN BIG! 📈🤖 #cravio #ai #shorts",
+    "Get PREMIUM Videos Instantly & Profit! 💎💵 #cravio #ai #shorts",
+    "No Skills Needed: This AI Pays Me $1000/Week! 🤯🤑 #cravio #ai #shorts",
+    "Your FIRST Viral Video Starts with THIS AI! 🔥🎬 #cravio #ai #shorts",
+    "Build a Faceless Empire with ONE Tool! 💼🏗️ #cravio #ai #shorts",
+    "Turn Your Ideas into CASH with AI! 💡💰 #cravio #ai #shorts",
+    "Quit Editing, Start Earning: The AI Revolution! ✨🏆 #cravio #ai #shorts",
+    "Unlock YouTube's Hidden Income Stream with AI! 🔓🔑 #cravio #ai #shorts",
+    "Faceless Videos That Actually PAY: My AI Blueprint! 🏠📈 #cravio #ai #shorts",
+    "Go From ZERO to Viral Hero using This Simple AI! ⚡🚀 #cravio #ai #shorts",
+    "Boost Your Income & Views Dramatically with AI! 💹📈 #cravio #ai #shorts",
+    "The ONLY AI Tool You Need for Effortless Profits! ✅🤖 #cravio #ai #shorts"
 ]
+
 
 DESCRIPTIONS = [
-    """🔥 Discover how I create professional faceless videos with Cravio AI!
+    """🔥 Discover how I create professional, high-quality faceless videos in minutes using the revolutionary Cravio AI! If you're looking for easy ways to make money online and grow a successful YouTube channel without showing your face or using your voice, this video is for you.
 
-In this video, I show you my complete workflow for making high-quality content without showing my face or using my voice. Cravio handles everything from scripts to final edits.
+Learn my complete workflow for automated video creation, from turning simple text scripts into engaging visual content. Cravio AI handles everything – from generating compelling visuals to adding background music and voiceovers – making the video editing process incredibly fast and simple.
 
-✅ No camera needed
-✅ No microphone needed
-✅ No editing skills required
-✅ Super easy to use
+This powerful AI tool is perfect for anyone who wants to start a faceless YouTube channel, create content for affiliate marketing, or build a passive income stream online. Stop struggling with complex video editing software and expensive equipment. Cravio AI makes it accessible for everyone.
 
-Try Cravio AI: http://cravioai.vercel.app
+In this tutorial, I'll show you step-by-step how to leverage Cravio AI to produce professional-grade videos that attract viewers and help you monetize your content effectively.
 
-#CravioAI #FacelessContent #ContentCreation #AITools #PassiveIncome
+✅ Create professional faceless videos quickly
+✅ No camera, microphone, or prior editing skills needed
+✅ Automate your content creation process
+✅ Ideal for building a passive income source
+✅ Generate high-quality videos from text or scripts
+✅ Grow your YouTube channel faster
+
+Try Cravio AI and transform your content creation journey: http://cravioai.vercel.app
+
+#CravioAI #FacelessContent #ContentCreation #AITools #PassiveIncome #MakeMoneyOnline #YouTubeAutomation #AIVideoCreation #OnlineBusiness #SideHustle #DigitalMarketing #YouTubeGrowth #VideoEditingSoftware #NoFaceYouTube #EarnOnline
     """,
-    
-    """💸 Want to create faceless videos that actually get views?
 
-I've tried dozens of AI tools, but Cravio is the only one that consistently produces high-quality content that performs well. In this video, I'll show you exactly how I use it.
+    """💸 Want to create faceless videos that actually get views, subscribers, and generate income? I've tested numerous AI video generators, and Cravio AI is the standout tool that consistently produces high-performing, professional content.
 
-Try Cravio yourself: http://cravioai.vercel.app
+In this in-depth video, I reveal exactly how I use Cravio AI to create engaging faceless videos that rank well and drive traffic. Whether you're interested in affiliate marketing, selling digital products, or building a brand without being on camera, Cravio AI provides the technology to make it happen.
 
-#CravioAI #ContentCreation #AITools #FacelessYouTube #PassiveIncome
+Learn how to optimize your video content for the YouTube algorithm with high-quality production value, even if you have zero technical skills. Cravio AI simplifies the entire process, allowing you to focus on your content strategy and monetization.
+
+Discover how to go from a simple idea or script to a fully produced, monetizable video in a fraction of the time it would take with traditional methods.
+
+Try Cravio yourself and see the difference it makes for your channel's performance and income: http://cravioai.vercel.app
+
+#CravioAI #ContentCreation #AITools #FacelessYouTube #PassiveIncome #YouTubeSEO #VideoMarketing #AffiliateMarketing #OnlineIncome #DigitalCreator #ContentAutomation #ViralVideos #HighQualityVideo #MonetizeYouTube
     """,
-    
-    """✨ The EASIEST way to create faceless videos in 2025!
 
-Cravio AI has completely transformed my content creation process. In this video, I'll demonstrate how you can go from a simple idea to a fully produced video in minutes - no technical skills required!
+    """✨ The EASIEST and most effective way to create professional faceless videos and make money online in 2025! Cravio AI has completely revolutionized my approach to content creation and online earning.
 
-🔗 Try Cravio: http://cravioai.vercel.app
-#CravioAI #FacelessContent #AITools #ContentCreation #PassiveIncome
+Watch as I demonstrate how you can take a basic concept and turn it into a polished, high-quality video ready for YouTube or other platforms in just minutes – no complex software or technical expertise required!
+
+Cravio AI is designed for efficiency and results, enabling anyone to produce premium video content that looks like it was made by a professional team. It's the perfect solution for busy entrepreneurs, marketers, and creators looking to scale their output and increase their income without the usual hassle.
+
+Learn how this AI-powered platform automates scripting, visuals, voiceovers, and editing, giving you back valuable time to focus on growing your online business and maximizing your earnings.
+
+🔗 Try Cravio AI today and unlock your potential for automated, profitable content creation: http://cravioai.vercel.app
+
+#CravioAI #FacelessContent #AITools #ContentCreation #PassiveIncome #MakeMoneyOnline2025 #YouTubeTips #VideoAutomation #ProfessionalVideo #OnlineEarnings #DigitalProducts #ContentStrategy #BusinessAutomation #CreatorLife #SimplifyingContent
     """
 ]
+
 
 # YouTube comment to add after upload
 VIDEO_COMMENTS = [
