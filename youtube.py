@@ -24,8 +24,11 @@ cloudinary.config(
     api_secret=os.getenv("CLOUDINARY_API_SECRET")
 )
 
-# YouTube API credentials - SIMPLIFIED SCOPES
-SCOPES = ["https://www.googleapis.com/auth/youtube"]  # This single scope should cover everything
+# YouTube API credentials - FIX: Use the exact same scopes as in your token
+SCOPES = [
+    "https://www.googleapis.com/auth/youtube.upload", 
+    "https://www.googleapis.com/auth/youtube.force-ssl"
+]
 API_SERVICE_NAME = "youtube"
 API_VERSION = "v3"
 YOUTUBE_CLIENT_SECRETS_JSON = os.getenv("YOUTUBE_CLIENT_SECRETS_JSON")
@@ -123,29 +126,44 @@ def get_youtube_credentials(force_refresh=False):
     # If no local token file, check environment variable
     if not creds and YOUTUBE_TOKEN_JSON:
         try:
-            # Check if it's a file path
-            if os.path.exists(YOUTUBE_TOKEN_JSON):
-                with open(YOUTUBE_TOKEN_JSON, 'r') as f:
-                    token_data = f.read()
-                    try:
-                        creds = Credentials.from_authorized_user_info(
-                            info=json.loads(token_data), scopes=SCOPES)
-                        logger.info("Loaded credentials from YOUTUBE_TOKEN_JSON file")
-                    except json.JSONDecodeError:
-                        # Try eval as fallback
-                        creds = Credentials.from_authorized_user_info(
-                            info=eval(token_data), scopes=SCOPES)
-                        logger.info("Loaded credentials from YOUTUBE_TOKEN_JSON file (eval method)")
-            else:
-                # Try as a JSON string
-                try:
-                    creds = Credentials.from_authorized_user_info(
-                        info=json.loads(YOUTUBE_TOKEN_JSON), scopes=SCOPES)
-                    logger.info("Loaded credentials from YOUTUBE_TOKEN_JSON2 environment variable")
-                except (json.JSONDecodeError, TypeError):
-                    logger.warning("YOUTUBE_TOKEN_JSON2 is neither a valid file path nor a valid JSON string")
+            # FIX: Try to directly parse the token JSON string
+            try:
+                token_info = json.loads(YOUTUBE_TOKEN_JSON)
+                creds = Credentials.from_authorized_user_info(
+                    info=token_info, scopes=SCOPES)
+                logger.info("Loaded credentials from YOUTUBE_TOKEN_JSON environment variable")
+            except json.JSONDecodeError:
+                # Try to properly format the token
+                token_str = YOUTUBE_TOKEN_JSON.replace("'", '"')
+                token_info = json.loads(token_str)
+                creds = Credentials.from_authorized_user_info(
+                    info=token_info, scopes=SCOPES)
+                logger.info("Loaded credentials from YOUTUBE_TOKEN_JSON environment variable (after formatting)")
         except Exception as e:
-            logger.error(f"Error loading credentials from YOUTUBE_TOKEN_JSON2: {str(e)}")
+            logger.error(f"Error loading credentials from YOUTUBE_TOKEN_JSON: {str(e)}")
+            
+            # FIX: Additional fallback for when token JSON is not properly formatted
+            try:
+                token_parts = YOUTUBE_TOKEN_JSON.split(',')
+                token_dict = {}
+                for part in token_parts:
+                    if ':' in part:
+                        key, value = part.split(':', 1)
+                        key = key.strip(' {}"\'"')
+                        value = value.strip(' "\'"')
+                        token_dict[key] = value
+                
+                creds = Credentials(
+                    token=token_dict.get('token'),
+                    refresh_token=token_dict.get('refresh_token'),
+                    token_uri=token_dict.get('token_uri', 'https://oauth2.googleapis.com/token'),
+                    client_id=token_dict.get('client_id'),
+                    client_secret=token_dict.get('client_secret'),
+                    scopes=SCOPES
+                )
+                logger.info("Loaded credentials from YOUTUBE_TOKEN_JSON environment variable (manual parsing)")
+            except Exception as e2:
+                logger.error(f"Error during fallback token parsing: {str(e2)}")
     
     # Check if credentials are valid
     if creds and creds.valid:
@@ -167,49 +185,36 @@ def get_youtube_credentials(force_refresh=False):
             logger.error(f"Error refreshing token: {str(e)}")
             # Proceed to re-authentication
     
-    # Need to authenticate from scratch
-    logger.info("Authenticating from scratch")
-    try:
-        # Handle client secrets
-        if os.path.exists(YOUTUBE_CLIENT_SECRETS_JSON):
-            # It's a file path
-            flow = InstalledAppFlow.from_client_secrets_file(
-                YOUTUBE_CLIENT_SECRETS_JSON, SCOPES)
-            logger.info(f"Using client secrets from file: {YOUTUBE_CLIENT_SECRETS_JSON}")
-        else:
-            # Create a temporary file from the JSON string
-            with tempfile.NamedTemporaryFile(mode='w+', suffix='.json', delete=False) as temp_file:
-                temp_file.write(YOUTUBE_CLIENT_SECRETS_JSON)
-                temp_secrets_path = temp_file.name
-            
-            logger.info(f"Created temporary client secrets file: {temp_secrets_path}")
-            flow = InstalledAppFlow.from_client_secrets_file(
-                temp_secrets_path, SCOPES)
-            os.unlink(temp_secrets_path)  # Clean up
-            
-        # For Render servers or other headless environments, use this method
-        try:
-            # Try headless auth first
-            flow.run_console()
-            logger.info("Used console-based authentication")
-        except Exception as console_error:
-            logger.warning(f"Console authentication failed: {str(console_error)}, trying local server.")
-            # Fall back to local server method if console fails
-            flow.run_local_server(port=0)
-            logger.info("Used local server authentication")
-        
-        creds = flow.credentials
-        
-        # Save the credentials for the next run
-        with open(token_file, 'w') as token:
-            token.write(creds.to_json())
-            logger.info(f"Saved new credentials to {token_file}")
-        
+    # FIX: If we've gotten to this point, we need to use the saved credentials even if they're expired
+    if creds and creds.refresh_token:
+        logger.info("Using expired credentials with refresh token")
         return creds
-        
+    
+    # FIX: Additional authentication method suitable for headless servers
+    try:
+        # Try to create credentials from client secrets in environment variable
+        if YOUTUBE_CLIENT_SECRETS_JSON:
+            client_secrets = json.loads(YOUTUBE_CLIENT_SECRETS_JSON)
+            client_id = client_secrets.get('web', {}).get('client_id')
+            client_secret = client_secrets.get('web', {}).get('client_secret')
+            
+            if client_id and client_secret:
+                # Create a minimal credential object
+                logger.info("Creating minimal credentials from client secrets")
+                creds = Credentials(
+                    None,  # No token
+                    None,  # No refresh token
+                    token_uri='https://oauth2.googleapis.com/token',
+                    client_id=client_id,
+                    client_secret=client_secret,
+                    scopes=SCOPES
+                )
+                return creds
     except Exception as e:
-        logger.error(f"Authentication failed: {str(e)}")
-        return None
+        logger.error(f"Error creating minimal credentials: {str(e)}")
+    
+    logger.error("Failed to obtain valid credentials through any method")
+    return None
 
 
 def fetch_random_video_from_cloudinary():

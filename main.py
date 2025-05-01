@@ -48,7 +48,7 @@ def initialize_scheduler():
 
     scheduler.add_job(
         instagram_post,
-        CronTrigger(hour=20, minute=30, timezone=india_tz),
+        CronTrigger(hour=21, minute=55, timezone=india_tz),
         id="instagram_evening_post",
         name="Evening Instagram Post",
         replace_existing=True
@@ -58,15 +58,15 @@ def initialize_scheduler():
     scheduler.add_job(
         instagram2_post,
         CronTrigger(hour=11, minute=0, timezone=india_tz),
-        id="instagram_morning_post",
+        id="instagram2_morning_post",
         name="Morning Instagram Post",
         replace_existing=True
     )
 
     scheduler.add_job(
         instagram2_post,
-        CronTrigger(hour=20, minute=30, timezone=india_tz),
-        id="instagram_evening_post",
+        CronTrigger(hour=22, minute=0, timezone=india_tz),
+        id="instagram2_evening_post",
         name="Evening Instagram Post",
         replace_existing=True
     )
@@ -82,7 +82,7 @@ def initialize_scheduler():
 
     scheduler.add_job(
         youtube_upload,
-        CronTrigger(hour=20, minute=30, timezone=india_tz),
+        CronTrigger(hour=22, minute=5, timezone=india_tz),
         id="youtube_evening_post",
         name="Evening YouTube Upload",
         replace_existing=True
@@ -92,15 +92,15 @@ def initialize_scheduler():
     scheduler.add_job(
         youtube2_upload,
         CronTrigger(hour=10, minute=55, timezone=india_tz),
-        id="youtube_morning_post",
+        id="youtube2_morning_post",
         name="Morning YouTube Upload",
         replace_existing=True
     )
 
     scheduler.add_job(
         youtube2_upload,
-        CronTrigger(hour=20, minute=30, timezone=india_tz),
-        id="youtube_evening_post",
+        CronTrigger(hour=22, minute=10, timezone=india_tz),
+        id="youtube2_evening_post",
         name="Evening YouTube Upload",
         replace_existing=True
     )
@@ -137,7 +137,7 @@ def manual_instagram_post():
         logger.error(f"Error in manual Instagram post: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 @app.get("/instagram2/post-now")
-def manual_instagram_post():
+def manual_instagram2_post():
     """Trigger an immediate Instagram post."""
     try:
         instagram2_post()
@@ -156,7 +156,7 @@ def manual_youtube_upload():
         logger.error(f"Error in manual YouTube upload: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 @app.get("/youtube2/upload-now")
-def manual_youtube_upload():
+def manual_youtube2_upload():
     """Trigger an immediate YouTube upload."""
     try:
         youtube2_upload()
