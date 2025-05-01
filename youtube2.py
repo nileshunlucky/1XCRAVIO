@@ -32,7 +32,7 @@ SCOPES = [
 API_SERVICE_NAME = "youtube"
 API_VERSION = "v3"
 YOUTUBE_CLIENT_SECRETS_JSON = os.getenv("YOUTUBE_CLIENT_SECRETS_JSON")
-YOUTUBE_TOKEN_JSON2 = os.getenv("YOUTUBE_TOKEN_JSON2")
+YT_CRAVIOFY_JSON = os.getenv("YT_CRAVIOFY_JSON")
 CLOUDINARY_FOLDER = "CRAVIOFY"
 
 # YouTube video metadata (unchanged)
@@ -124,27 +124,27 @@ def get_youtube_credentials(force_refresh=False):
             creds = None
     
     # If no local token file, check environment variable
-    if not creds and YOUTUBE_TOKEN_JSON2:
+    if not creds and YT_CRAVIOFY_JSON:
         try:
             # FIX: Try to directly parse the token JSON string
             try:
-                token_info = json.loads(YOUTUBE_TOKEN_JSON2)
+                token_info = json.loads(YT_CRAVIOFY_JSON)
                 creds = Credentials.from_authorized_user_info(
                     info=token_info, scopes=SCOPES)
-                logger.info("Loaded credentials from YOUTUBE_TOKEN_JSON2 environment variable")
+                logger.info("Loaded credentials from YT_CRAVIOFY_JSON environment variable")
             except json.JSONDecodeError:
                 # Try to properly format the token
-                token_str = YOUTUBE_TOKEN_JSON2.replace("'", '"')
+                token_str = YT_CRAVIOFY_JSON.replace("'", '"')
                 token_info = json.loads(token_str)
                 creds = Credentials.from_authorized_user_info(
                     info=token_info, scopes=SCOPES)
-                logger.info("Loaded credentials from YOUTUBE_TOKEN_JSON2 environment variable (after formatting)")
+                logger.info("Loaded credentials from YT_CRAVIOFY_JSON environment variable (after formatting)")
         except Exception as e:
-            logger.error(f"Error loading credentials from YOUTUBE_TOKEN_JSON2: {str(e)}")
+            logger.error(f"Error loading credentials from YT_CRAVIOFY_JSON: {str(e)}")
             
             # FIX: Additional fallback for when token JSON is not properly formatted
             try:
-                token_parts = YOUTUBE_TOKEN_JSON2.split(',')
+                token_parts = YT_CRAVIOFY_JSON.split(',')
                 token_dict = {}
                 for part in token_parts:
                     if ':' in part:
@@ -161,7 +161,7 @@ def get_youtube_credentials(force_refresh=False):
                     client_secret=token_dict.get('client_secret'),
                     scopes=SCOPES
                 )
-                logger.info("Loaded credentials from YOUTUBE_TOKEN_JSON2 environment variable (manual parsing)")
+                logger.info("Loaded credentials from YT_CRAVIOFY_JSON environment variable (manual parsing)")
             except Exception as e2:
                 logger.error(f"Error during fallback token parsing: {str(e2)}")
     
