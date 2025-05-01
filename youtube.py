@@ -26,7 +26,8 @@ cloudinary.config(
 
 # YouTube API credentials
 SCOPES = ["https://www.googleapis.com/auth/youtube.upload", 
-          "https://www.googleapis.com/auth/youtube"]
+          "https://www.googleapis.com/auth/youtube",
+          "https://www.googleapis.com/auth/youtube.force-ssl"]  # Added force-ssl scope for comments
 API_SERVICE_NAME = "youtube"
 API_VERSION = "v3"
 YOUTUBE_CLIENT_SECRETS_JSON = os.getenv("YOUTUBE_CLIENT_SECRETS_JSON", "client_secret.json")
@@ -79,6 +80,13 @@ Cravio AI has completely transformed my content creation process. In this video,
 
 #CravioAI #FacelessContent #AITools #ContentCreation #PassiveIncome
     """
+]
+
+# YouTube comment to add after upload
+VIDEO_COMMENTS = [
+    "Cravio AI ✨ http://cravioai.vercel.app",
+    "Try Cravio AI for free today! ✨ http://cravioai.vercel.app",
+    "Check out Cravio AI ✨ http://cravioai.vercel.app"
 ]
 
 TAGS = [
@@ -190,6 +198,38 @@ def download_video_to_temp_file(video_url):
         return None
 
 
+def add_comment_to_video(youtube, video_id):
+    """Add a comment to the uploaded video."""
+    try:
+        # Choose a random comment from the list
+        comment_text = random.choice(VIDEO_COMMENTS)
+        
+        # Create the comment
+        comment = {
+            "snippet": {
+                "videoId": video_id,
+                "topLevelComment": {
+                    "snippet": {
+                        "textOriginal": comment_text
+                    }
+                }
+            }
+        }
+        
+        # Insert the comment
+        response = youtube.commentThreads().insert(
+            part="snippet",
+            body=comment
+        ).execute()
+        
+        comment_id = response["id"]
+        logger.info(f"Successfully added comment to video {video_id}. Comment ID: {comment_id}")
+        return comment_id
+    except Exception as e:
+        logger.error(f"Error adding comment to video {video_id}: {str(e)}")
+        return None
+
+
 def upload_video_to_youtube(file_path):
     """Upload a video to YouTube using the YouTube Data API."""
     try:
@@ -239,6 +279,13 @@ def upload_video_to_youtube(file_path):
         # Get the video ID from the response
         video_id = response["id"]
         logger.info(f"Video uploaded successfully! Video ID: {video_id}")
+        
+        # Add a comment to the video
+        logger.info(f"Adding comment to video {video_id}...")
+        # Add a small delay to ensure the video is fully processed before commenting
+        time.sleep(5)
+        comment_id = add_comment_to_video(youtube, video_id)
+        
         return video_id
         
     except Exception as e:
