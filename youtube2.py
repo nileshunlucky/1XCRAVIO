@@ -56,7 +56,7 @@ In this video, I show you my complete workflow for making high-quality content w
 ✅ No editing skills required
 ✅ Super easy to use
 
-Try Cravio AI: cravioai.vercel.app
+Try Cravio AI: http://cravioai.vercel.app
 
 #CravioAI #FacelessContent #ContentCreation #AITools #PassiveIncome
     """,
@@ -65,7 +65,7 @@ Try Cravio AI: cravioai.vercel.app
 
 I've tried dozens of AI tools, but Cravio is the only one that consistently produces high-quality content that performs well. In this video, I'll show you exactly how I use it.
 
-Try Cravio yourself: cravioai.vercel.app
+Try Cravio yourself: http://cravioai.vercel.app
 
 #CravioAI #ContentCreation #AITools #FacelessYouTube #PassiveIncome
     """,
@@ -74,17 +74,16 @@ Try Cravio yourself: cravioai.vercel.app
 
 Cravio AI has completely transformed my content creation process. In this video, I'll demonstrate how you can go from a simple idea to a fully produced video in minutes - no technical skills required!
 
-🔗 Try Cravio: cravioai.vercel.app
-
+🔗 Try Cravio: http://cravioai.vercel.app
 #CravioAI #FacelessContent #AITools #ContentCreation #PassiveIncome
     """
 ]
 
 # YouTube comment to add after upload
 VIDEO_COMMENTS = [
-    "Cravio AI ✨ http://cravioai.vercel.app",
-    "Try Cravio AI for free today! ✨ http://cravioai.vercel.app",
-    "Check out Cravio AI ✨ http://cravioai.vercel.app"
+    "Cravio AI ✨ cravioai.vercel.app",
+    "Try Cravio AI for free today! ✨ cravioai.vercel.app",
+    "Check out Cravio AI ✨ cravioai.vercel.app"
 ]
 
 TAGS = [
