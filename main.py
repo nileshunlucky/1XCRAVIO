@@ -37,10 +37,27 @@ def initialize_scheduler():
     scheduler = BackgroundScheduler()
     india_tz = timezone("Asia/Kolkata")
 
+        # YouTube schedules
+    scheduler.add_job(
+        youtube_upload,
+        CronTrigger(hour=10, minute=50, timezone=india_tz),
+        id="youtube_morning_post",
+        name="Morning YouTube Upload",
+        replace_existing=True
+    )
+
+    scheduler.add_job(
+        youtube_upload,
+        CronTrigger(hour=18, minute=50, timezone=india_tz),
+        id="youtube_evening_post",
+        name="Evening YouTube Upload",
+        replace_existing=True
+    )
+
     # Instagram schedules
     scheduler.add_job(
         instagram_post,
-        CronTrigger(hour=10, minute=50, timezone=india_tz),
+        CronTrigger(hour=10, minute=55, timezone=india_tz),
         id="instagram_morning_post",
         name="Morning Instagram Post",
         replace_existing=True
@@ -48,7 +65,7 @@ def initialize_scheduler():
 
     scheduler.add_job(
         instagram_post,
-        CronTrigger(hour=18, minute=50, timezone=india_tz),
+        CronTrigger(hour=18, minute=55, timezone=india_tz),
         id="instagram_evening_post",
         name="Evening Instagram Post",
         replace_existing=True
@@ -57,7 +74,7 @@ def initialize_scheduler():
     # Instagram 2 schedules
     scheduler.add_job(
         instagram2_post,
-        CronTrigger(hour=10, minute=55, timezone=india_tz),
+        CronTrigger(hour=11, minute=0, timezone=india_tz),
         id="instagram2_morning_post",
         name="Morning Instagram Post",
         replace_existing=True
@@ -65,26 +82,9 @@ def initialize_scheduler():
 
     scheduler.add_job(
         instagram2_post,
-        CronTrigger(hour=18, minute=55, timezone=india_tz),
+        CronTrigger(hour=19, minute=0, timezone=india_tz),
         id="instagram2_evening_post",
         name="Evening Instagram Post",
-        replace_existing=True
-    )
-
-    # YouTube schedules
-    scheduler.add_job(
-        youtube_upload,
-        CronTrigger(hour=11, minute=0, timezone=india_tz),
-        id="youtube_morning_post",
-        name="Morning YouTube Upload",
-        replace_existing=True
-    )
-
-    scheduler.add_job(
-        youtube_upload,
-        CronTrigger(hour=19, minute=0, timezone=india_tz),
-        id="youtube_evening_post",
-        name="Evening YouTube Upload",
         replace_existing=True
     )
 
